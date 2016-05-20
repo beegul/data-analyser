@@ -333,24 +333,24 @@ for(i in 1:9)#i in 1:9
     #Creates the data frame for each participants interpolated data after the script has been completed.
     #CurrentInterpolated <- data.frame(matrix(unlist(UniqueInterpolation$y), nrow = length(UniqueInterpolation$y), byrow = T), stringsAsFactors = FALSE)
     CurrentInterpolated <- FilteredData
-    InterpolatedDataName <-paste("InterpolatedData", j, sep = "")
+    InterpolatedDataName <- paste("InterpolatedData", j, sep = "")
     assign(InterpolatedDataName, na.omit(CurrentInterpolated))
     InterpolatedNameVector <- c(InterpolatedNameVector, InterpolatedDataName)
     
     #Creates a data frame for the velocity of each participant so we can use the data later.
     #CurrentInterpolatedVelocity <- data.frame(matrix(unlist(VelocityInterpolation$y), nrow = length(VelocityInterpolation$y), byrow = T), stringsAsFactors = FALSE)
     CurrentInterpolatedVelocity <- Velocity
-    InterpolatedVelocityDataName <-paste("InterpolatedDataVelocity", j, sep = "")
+    InterpolatedVelocityDataName <- paste("InterpolatedDataVelocity", j, sep = "")
     assign(InterpolatedVelocityDataName, na.omit(CurrentInterpolatedVelocity))
     InterpolatedVelocityNameVector <- c(InterpolatedVelocityNameVector, InterpolatedVelocityDataName)
     
     #creates a data frame for the acceleration pf each participant so we can use the data later.
     #CurrentInterpolatedAcceleration <- data.frame(matrix(unlist(AccelerationInterpolation$y), nrow = length(AccelerationInterpolation$y), byrow = T), stringsAsFactors = FALSE)
     CurrentInterpolatedAcceleration <- Acceleration
-    InterpolatedAccelerationDataName <-paste("InterpolatedDataAcceleration", j, sep = "")
+    InterpolatedAccelerationDataName <- paste("InterpolatedDataAcceleration", j, sep = "")
     assign(InterpolatedAccelerationDataName, na.omit(CurrentInterpolatedAcceleration))
     InterpolatedAccelerationNameVector <- c(InterpolatedAccelerationNameVector, InterpolatedAccelerationDataName)
-
+    
     #Clears variables just to be sure.
     Gap <-NULL
     CurrentData<-NULL
@@ -361,13 +361,13 @@ for(i in 1:9)#i in 1:9
   ColumnNumber  = 1
   for(i in 1:ParticipantNumber)
   {
-    DataName <- paste("Participant", i, sep="")
+    #DataName <- paste("Participant", i, sep="")
     InterpolatedDataName <- paste("U_InterpolatedParticipant", i, "_", TaskName, sep = "")#U = Unique
     InterpolatedVelocityDataName <- paste("V_InterpolatedParticipant", i, "_", TaskName, sep = "")#V = Velocity
     InterpolatedAccelerationDataName <- paste("A_InterpolatedParticipant", i, "_", TaskName, sep = "")#A = Acceleration
     for(j in 1:DataSetsPerPartcipant)
     {
-      assign(DataName, data.frame(get(NameVector[ColumnNumber]), get(NameVector[ColumnNumber+1]), get(NameVector[ColumnNumber+2]), get(NameVector[ColumnNumber+3])))
+      #assign(DataName, data.frame(get(NameVector[ColumnNumber]), get(NameVector[ColumnNumber+1]), get(NameVector[ColumnNumber+2]), get(NameVector[ColumnNumber+3])))
       assign(InterpolatedDataName, data.frame(get(InterpolatedNameVector[ColumnNumber]), get(InterpolatedNameVector[ColumnNumber+1]), get(InterpolatedNameVector[ColumnNumber+2]), get(InterpolatedNameVector[ColumnNumber+3])))
       assign(InterpolatedVelocityDataName, data.frame(get(InterpolatedVelocityNameVector[ColumnNumber]), get(InterpolatedVelocityNameVector[ColumnNumber+1]), get(InterpolatedVelocityNameVector[ColumnNumber+2]), get(InterpolatedVelocityNameVector[ColumnNumber+3])))
       assign(InterpolatedAccelerationDataName, data.frame(get(InterpolatedAccelerationNameVector[ColumnNumber]), get(InterpolatedAccelerationNameVector[ColumnNumber+1]), get(InterpolatedAccelerationNameVector[ColumnNumber+2]), get(InterpolatedAccelerationNameVector[ColumnNumber+3])))
@@ -386,18 +386,52 @@ for(i in 1:9)#i in 1:9
     colnames(TempData) <- c("Heading", "Roll", "Pitch", "Task.Time")
     assign(InterpolatedAccelerationDataName, TempData)
   }
-  #for(i in 1:ncol(DataToUse))#4
-  #{
+  
+  for(i in 1:ncol(DataToUse))
+  {
     #rm(list = NameVector[i])
     #rm(list = InterpolatedNameVector[i])
     #rm(list = InterpolatedVelocityNameVector[i])
     #rm(list = InterpolatedAccelerationNameVector[i])
-  #}
+  }
   rm(DataToUse, ColumnNumber, CurrentData, Gap, i, j, k, l, LoopAmount, DataName, 
      InterpolatedDataName, NameVector, InterpolatedNameVector, CurrentInterpolated, 
      CurrentInterpolatedVelocity, CurrentInterpolatedAcceleration,FilteredData, ParticipantCount, TempData, InterpolatedAccelerationDataName, InterpolatedVelocityDataName, 
      InterpolatedAccelerationNameVector, InterpolatedVelocityNameVector)
 }
+
+#Create a data frame for each scenario and each task in that scenario.
+# RMS_NVRTask1 <- data.frame()
+# RMS_NVRTask2 <- data.frame()
+# RMS_NVRTask3 <- data.frame()
+# 
+# RMS_VRTask1 <- data.frame()
+# RMS_VRTask2 <- data.frame()
+# RMS_VRTask3 <- data.frame()
+# 
+# RMS_NVRWTask1 <- data.frame()
+# RMS_NVRWTask2 <- data.frame()
+# RMS_NVRWTask3 <- data.frame()
+# 
+# 
+# for(i in 1:21)
+# {
+#     H <- get(paste("U_InterpolatedParticipant", i, "_", "NVRTask1", sep=""))[, c(1)]
+#     R <- get(paste("U_InterpolatedParticipant", i, "_", "NVRTask1", sep=""))[, c(2)]
+#     P<- get(paste("U_InterpolatedParticipant", i, "_", "NVRTask1", sep=""))[, c(3)]
+#     TT<-get(paste("U_InterpolatedParticipant", i, "_", "NVRTask1", sep=""))[, c(4)]
+#     
+#     RMSH <- sqrt(sum(H^2)/length(H))
+#     RMSR <- sqrt(sum(R^2)/length(R))
+#     RMSP <- sqrt(sum(P^2)/length(P))
+#     RMSTT <- sqrt(sum(TT^2)/length(TT))
+#     
+#     new_row <- c(RMSH, RMSR, RMSP, RMSTT)
+#     RMS_NVRTask1 <- rbind(RMS_NVRTask1, new_row)
+# }
+# colnames(RMS_NVRTask1) <- c("Heading", "Roll", "Pitch", "Task.Time")
+
+
 
 
 
